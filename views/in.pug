@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    link(rel="stylesheet", href="https://www.w3schools.com/w3css/4/w3.css")
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    meta(name="theme-color", content="#000000")
+
+body
+  div(class='w3-container w3-red')
+    h2 Hello user!
+
+  form(action='/login', method='POST')
+    p
+      label E-mail: 
+      input(type='email', name='lmail', value='', class='w3-input')
+      label Password: 
+      input(type='password', name='lpw', value='' class='w3-input')
+    input(type='submit', value='Log in', class='w3-btn w3-black')
+  
+  div(class='w3-container w3-blue')
+    h4 For those who are here for the first time:
+
+  form(action='/signup', method='POST')
+    p
+      label Your first name: 
+      input(type='text', name='fn', value='', class='w3-input')
+      label Your last name: 
+      input(type='text', name='ln', value='', class='w3-input')
+      label Your e-mail: 
+      input(type='email', name='mail', value='', class='w3-input')
+      label Your password: 
+      input(type='password', name='pw', value='', class='w3-input')
+      label Repeat your password: 
+      input(type='password', name='pwr', value='', class='w3-input')
+    input(type='submit', value='Sign up', class='w3-btn w3-black')
+  

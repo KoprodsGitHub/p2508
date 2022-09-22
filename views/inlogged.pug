@@ -1,0 +1,55 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    link(rel="stylesheet", href="https://www.w3schools.com/w3css/4/w3.css")
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    meta(name="theme-color", content="#000000")
+
+body
+  h1 #{gr} #{fn} #{ln}
+
+  div(class='w3-container w3-blue')
+    h5 Find a password:
+
+  form(action='/passfind', method='POST')
+    p
+      label Website name: 
+      input(type='text', name='fwn', value='', class='w3-input')
+    input(type='submit', value='Find', class='w3-btn w3-black')
+  
+  div(class='w3-container w3-blue')
+    h5 Add a new password:
+
+  form(action='/passadd', method='POST')
+    p
+      label Website name: 
+      input(type='text', name='awn', value='', class='w3-input')
+      label Your website password: 
+      input(type='password', name='apw', value='', class='w3-input')
+    input(type='submit', value='Add', class='w3-btn w3-black')
+
+  div(class='w3-container w3-blue')
+    h5 Update an added password:
+
+  form(action='/passupdate', method='POST')
+    p
+      label Website name: 
+      input(type='text', name='uwn', value='', class='w3-input')
+      label Your old website password: 
+      input(type='password', name='uopw', value='', class='w3-input')
+      label Your new website password: 
+      input(type='password', name='unpw', value='', class='w3-input')
+    input(type='submit', value='Update', class='w3-btn w3-black')
+
+  div(class='w3-container w3-blue')
+    h5 Delete an added password:
+
+  form(action='/passdelete', method='POST')
+    p
+      label Website name: 
+      input(type='text', name='dwn', value='', class='w3-input')
+      label Your website password: 
+      input(type='password', name='dpw', value='', class='w3-input')
+    input(type='submit', value='Delete', class='w3-btn w3-black')
+
