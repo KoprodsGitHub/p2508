@@ -3,35 +3,75 @@ html
   head
     meta(charset="utf-8")
     link(rel="stylesheet", href="https://www.w3schools.com/w3css/4/w3.css")
+    link(href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet')
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     meta(name="theme-color", content="#000000")
+  
+  style.
+    body, h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat';
+    }
+    .button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 16px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+    h1 {
+      font-weight: bold;
+    }
+    .loginb, .signupb {
+      font-size: 200%;
+      background-color: black;
+      color: white;
+    }
+
+    .loginb:hover, .signupb:hover {
+      font-size: 350%;
+      background-color: yellow;
+      color: black;
+    }
 
 body
   div(class='w3-container w3-red')
-    h2 Hello user!
+    h1(class='w3-wide') Password database
 
-  form(action='/login', method='POST')
-    p
-      label E-mail: 
-      input(type='email', name='lmail', value='', class='w3-input')
-      label Password: 
-      input(type='password', name='lpw', value='' class='w3-input')
-    input(type='submit', value='Log in', class='w3-btn w3-black')
-  
+  div(class='w3-margin')
+    form(action='/login', method='POST')
+      p
+        label E-mail: 
+        input(type='email', name='lmail', value='', class='w3-input')
+        label Password: 
+        input(type='password', name='lpw', value='' class='w3-input')
+      input(type='submit', value='Log in', class='loginb button')
+  div(class='w3-margin')
+      form(action='/forgotpass', method='POST')
+        input(type='submit' value='Forgot your password, you moron?' class='w3-button') 
+
   div(class='w3-container w3-blue')
-    h4 For those who are here for the first time:
+    h5 For newcomers:
 
-  form(action='/signup', method='POST')
-    p
-      label Your first name: 
-      input(type='text', name='fn', value='', class='w3-input')
-      label Your last name: 
-      input(type='text', name='ln', value='', class='w3-input')
-      label Your e-mail: 
-      input(type='email', name='mail', value='', class='w3-input')
-      label Your password: 
-      input(type='password', name='pw', value='', class='w3-input')
-      label Repeat your password: 
-      input(type='password', name='pwr', value='', class='w3-input')
-    input(type='submit', value='Sign up', class='w3-btn w3-black')
+  div(class='w3-margin')
+    form(action='/signup', method='POST', autocomplete='off')
+      p
+        label Your first name: 
+        input(type='text', name='fn', value='', class='w3-input')
+        label Your last name: 
+        input(type='text', name='ln', value='', class='w3-input')
+        label Your e-mail: 
+        input(type='email', name='mail', value='', class='w3-input')
+        label Your password: 
+        input(type='password', name='pw', value='', class='w3-input')
+        label Repeat your password: 
+        input(type='password', name='pwr', value='', class='w3-input')
+      input(type='submit', value='Sign up', class='signupb button')
+  
+  div(class='w3-container w3-light-grey')
+      p(class='w3-wide') Made by me, 2022
   
