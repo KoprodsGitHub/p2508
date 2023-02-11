@@ -31,26 +31,29 @@ style.
     }
 
 body
-  div(class='w3-margin')
-    h1 List of your website passwords
 
+  div(class='w3-margin')
   table(class='w3-table-all w3-hoverable')
     tr
       th(class='th') Website
+      th(class='th') Login
       th(class='th') Password
     each value in arrx
       tr
-        td= value[0]   
-        td= value[1]
-  //-
-    div(class='w3-bar w3-black barsort')
-      label(class='w3-bar-item labsort') Sort table by:
-      form(action='/sapsort1', method='POST')
-        input(type='submit', value='Alphabet (websites)', class='w3-bar-item w3-button')
-      form(action='/sapsort2', method='POST')
-        input(type='submit', value='Alphabet (passwords)', class='w3-bar-item w3-button')
-      form(action='/sapdef', method='POST')
-        input(type='submit', value='Time added (default)', class='w3-bar-item w3-button')
+        form(action='/sapdelrw', method='POST')
+          td= value[0]   
+          td= value[1]
+          td= value[2]
+
+    //-
+      div(class='w3-bar w3-black barsort')
+        label(class='w3-bar-item labsort') Sort table by:
+        form(action='/sapsort1', method='POST')
+          input(type='submit', value='Alphabet (websites)', class='w3-bar-item w3-button')
+        form(action='/sapsort2', method='POST')
+          input(type='submit', value='Alphabet (passwords)', class='w3-bar-item w3-button')
+        form(action='/sapdef', method='POST')
+          input(type='submit', value='Time added (default)', class='w3-bar-item w3-button')
 
   div(class="w3-dropdown-hover dropdown")
     button(class="w3-wide w3-button labsort dropdown w3-black") Sort table by:
@@ -60,7 +63,8 @@ body
       form(action='/sapsort2', method='POST')
         input(type='submit', value='Alphabet (passwords)', class='w3-bar-item w3-button')
       form(action='/sapdef', method='POST')
-        input(type='submit', value='Time added (default)', class='w3-bar-item w3-button')
+        input(type='submit', value='Time added (default)', class='w3-bar-item w3-button') 
+
   
 
 

@@ -131,7 +131,7 @@ app.post('/newpass', (req, res, next) => {
 app.post('/sendemail', (req, res, next) => {
   User.findOne({mail: req.body.fmail}, function(err, obj) {
     if(obj==null) {
-      alert(`There's no help for you if you don't even remember your mail address.`);
+      alert(`There's no help for you if you cannot even remember your mail address.`);
       res.render("passforgot");
     } else {
       let urlId = obj._id.valueOf();
@@ -196,6 +196,10 @@ const PassSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  lg: {
+    type: String,
+    required: true,
+  },
   pw: {
     type: String,
     required: true,
@@ -215,16 +219,31 @@ app.post('/logout', (req, res, next) => {
 //one-password operations
 app.post('/passadd', (req, res, next) => {
   if(signed) {
-      const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
-      let encrPw = cipher.update(req.body.apw, "utf-8", "hex");
-      encrPw += cipher.final("hex");
-      let newPass = new Pass ({
-        mail: cUser,
-        wn: req.body.awn,
-        pw: encrPw
-      });
-      newPass.save();
-      alert(`Password for ${req.body.awn} added!`);
+      Pass.findOne({mail: cUser, wn: req.body.awn}, function(err, obj) {
+        if(req.body.awn != "" && obj != null) {
+          const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
+          let decrPw = decipher.update(obj.pw, "hex", "utf-8");
+          decrPw += decipher.final("utf8");
+          alert(`
+            Data for ${req.body.awn} have already been added by you!
+            Login for ${req.body.awn} is ${obj.lg}!
+            Password for ${req.body.awn} is ${decrPw}!`);
+        } else if(req.body.awn == "" || req.body.alg == "" || req.body.apw == "") {
+          alert(`Fill all of the fields - web name, login & password!`)   
+        } else {
+          const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+          let encrPw = cipher.update(req.body.apw, "utf-8", "hex");
+          encrPw += cipher.final("hex");
+          let newPass = new Pass ({
+            mail: cUser,
+            wn: req.body.awn,
+            lg: req.body.alg,
+            pw: encrPw
+          });
+          newPass.save();
+          alert(`Password for ${req.body.awn} added!`); 
+        }
+      }); 
       res.render("inlogged", {gr: "Password database management", fn: "", ln: ""});
   }
 });
@@ -238,7 +257,9 @@ app.post('/passfind', (req, res, next) => {
           const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
           let decrPw = decipher.update(obj.pw, "hex", "utf-8");
           decrPw += decipher.final("utf8");
-          alert(`Password for ${req.body.fwn} is ${decrPw}!`);
+          alert(`
+            Login for ${req.body.fwn} is ${obj.lg}!
+            Password for ${req.body.fwn} is ${decrPw}!`);
         }
     });
     res.render("inlogged", {gr: "Password database management", fn: "", ln: ""});
@@ -251,13 +272,18 @@ app.post('/passupdate', (req, res, next) => {
       if(obj == null) {
         alert(`Password for ${req.body.uwn} not found!`);
       } else {
-        alert(`Password for ${req.body.uwn} updated!`);
+        alert(`Data for ${req.body.uwn} updated!`);
       }
     });
-    const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
-    let encrPw = cipher.update(req.body.unpw, "utf-8", "hex");
-    encrPw += cipher.final("hex");
-    Pass.updateOne({mail: cUser, wn: req.body.uwn}, {pw: encrPw}, function(err, obj) {});
+    if(req.body.unlg != "") { 
+      Pass.updateOne({mail: cUser, wn: req.body.uwn}, {lg: req.body.unlg}, function(err, obj) {});
+    }
+    if(req.body.unpw != "") { 
+      const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+      let encrPw = cipher.update(req.body.unpw, "utf-8", "hex");
+      encrPw += cipher.final("hex");
+      Pass.updateOne({mail: cUser, wn: req.body.uwn}, {pw: encrPw}, function(err, obj) {});
+    }
     res.render("inlogged", {gr: "Password database management", fn: "", ln: ""});
   }
 });
@@ -282,7 +308,7 @@ app.post('/passdelete', (req, res, next) => {
 //table of passwords
 app.post('/sapdef', (req, res, next) => {
   if(signed) {
-    Pass.find({}, function(err, obj) {
+    Pass.find({mail: cUser}, function(err, obj) {
       if(obj == null) {
         alert(`No passwords found!`);
       } else {
@@ -291,7 +317,7 @@ app.post('/sapdef', (req, res, next) => {
           const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
           let decrPw = decipher.update(obj[i].pw, "hex", "utf-8");
           decrPw += decipher.final("utf8");
-          arr.push([obj[i].wn, decrPw]);
+          arr.push([obj[i].wn, obj[i].lg, decrPw]);
         }
         res.render("table", arrx=arr);
       }
@@ -301,7 +327,7 @@ app.post('/sapdef', (req, res, next) => {
 
 app.post('/sapsort1', (req, res, next) => {
   if(signed) {
-    Pass.find({}, function(err, obj) {
+    Pass.find({mail: cUser}, function(err, obj) {
       if(obj == null) {
         alert(`No passwords found!`);
       } else {
@@ -310,7 +336,7 @@ app.post('/sapsort1', (req, res, next) => {
           const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
           let decrPw = decipher.update(obj[i].pw, "hex", "utf-8");
           decrPw += decipher.final("utf8");
-          arr.push([obj[i].wn, decrPw]);
+          arr.push([obj[i].wn, obj[i].lg, decrPw]);
         }
         arr.sort();
         res.render("table", arrx=arr);
@@ -321,7 +347,7 @@ app.post('/sapsort1', (req, res, next) => {
 
 app.post('/sapsort2', (req, res, next) => {
   if(signed) {
-    Pass.find({}, function(err, obj) {
+    Pass.find({mail: cUser}, function(err, obj) {
       if(obj == null) {
         alert(`No passwords found!`);
       } else {
@@ -330,7 +356,7 @@ app.post('/sapsort2', (req, res, next) => {
           const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
           let decrPw = decipher.update(obj[i].pw, "hex", "utf-8");
           decrPw += decipher.final("utf8");
-          arr.push([obj[i].wn, decrPw]);
+          arr.push([obj[i].wn, obj[i].lg, decrPw]);
         }
         arr.sort((a, b) => (a[1] > b[1] ? 1 : -1))
         res.render("table", arrx=arr);
