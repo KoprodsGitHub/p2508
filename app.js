@@ -114,9 +114,9 @@ app.post('/login', (req, res, next) => {
           res.render("in");
         } else {
           bcrypt.compare(req.body.lpw, obj.pw, function(err, match) {
-            if(match && req.body.lmail == "pudlisako@gmail.com") {
+            /*if(match && req.body.lmail == "pudlisako@gmail.com") {
               res.render("hey");
-            } else if (match) {
+            } else*/ if (match) {
               res.render("inlogged", {gr: "Hi once again, ", fn: obj.fn, ln: obj.ln});
               req.session.user = obj;
               req.session.save();
