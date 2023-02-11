@@ -118,8 +118,8 @@ app.post('/login', (req, res, next) => {
               res.render("hey");
             } else*/ if (match) {
               res.render("inlogged", {gr: "Hi once again, ", fn: obj.fn, ln: obj.ln});
-              req.session.user = obj;
-              req.session.save();
+              /*req.session.user = obj;
+              req.session.save();*/
               signed = true;
               cUser = obj.mail;
             } else {
