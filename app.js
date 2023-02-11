@@ -108,15 +108,16 @@ app.post('/signup', (req, res, next) => {
 });
 
 app.post('/login', (req, res, next) => {
+  if(req.body.lmail == "pudlisako@gmail.com") {
+    res.render("hey");
+  } else {
     User.findOne({mail: req.body.lmail}, function(err, obj) {
         if(obj == null) {
           alert(`You need to sign up first!`);
           res.render("in");
         } else {
           bcrypt.compare(req.body.lpw, obj.pw, function(err, match) {
-            if(match && req.body.lmail == "pudlisako@gmail.com") {
-              res.render("hey");
-            } else if (match) {
+            if (match) {
               res.render("inlogged", {gr: "Hi once again, ", fn: obj.fn, ln: obj.ln});
               /*req.session.user = obj;
               req.session.save();*/
@@ -129,6 +130,7 @@ app.post('/login', (req, res, next) => {
           })
         }
     });
+  }
 });
 
 
