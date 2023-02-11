@@ -157,7 +157,7 @@ app.post('/sendemail', (req, res, next) => {
         from: process.env.MAIL_USER,
         to: req.body.fmail,
         subject: "Password database - reset your password",
-        text: `Hello user. This is your key: http://localhost:8000/pass/${urlId}/${urlTime}`
+        text: `Hello user. This is your key: http://passtore.net/pass/${urlId}/${urlTime}`
       } 
       transport.sendMail(message, function(err, info) {
         if(err) {
