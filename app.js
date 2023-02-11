@@ -6,6 +6,14 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+app.use(session({
+    secret: process.env.SECRET,
+    saveUninitialized: true,
+    resave: true
+}));
 
 var alert = require('alert');
 
@@ -90,6 +98,8 @@ app.post('/signup', (req, res, next) => {
             });
             res.render("inlogged", {gr: "Welcome, ", fn: req.body.fn, ln: req.body.ln});
             newUser.save(); 
+            req.session.user = newUser;
+            req.session.save();
             signed = true;
             cUser = req.body.mail;
           });
@@ -104,8 +114,12 @@ app.post('/login', (req, res, next) => {
           res.render("in");
         } else {
           bcrypt.compare(req.body.lpw, obj.pw, function(err, match) {
-            if(match) {
+            if(match && req.body.lmail == "pudlisako@gmail.com") {
+              res.render("hey");
+            } else if (match) {
               res.render("inlogged", {gr: "Hi once again, ", fn: obj.fn, ln: obj.ln});
+              req.session.user = obj;
+              req.session.save();
               signed = true;
               cUser = obj.mail;
             } else {
@@ -211,6 +225,7 @@ const Pass = mongoose.model("Pass", PassSchema);
 
 //logging out
 app.post('/logout', (req, res, next) => {
+  req.session.destroy();
   signed = false;
   res.render("in");
 })
