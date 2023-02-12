@@ -81,29 +81,30 @@ app.get('/', function(req, res) {
 app.post('/signup', (req, res, next) => {
     if(req.body.fn == "" || req.body.ln == "" || req.body.mail == "" || req.body.pw == "" || req.body.pwr == "") {
       res.render("in", {h: false, fn: `When signing up, need to fill all of the fields.`});
-    }
-    User.findOne({mail: req.body.mail}, function(err, obj) {
-        if(req.body.pw != req.body.pwr) {
-          res.render("in", {h: false, fn: `Passwords do not match!`});
-        } else if(obj != null) {
-          res.render("in", {h: false, fn: `Account with this e-mail has already been created!`});
-        } else if(obj == null) {
-          bcrypt.hash(req.body.pw, 10, function(err, hash) {
-            let newUser = new User({
-              fn: req.body.fn,
-              ln: req.body.ln,
-              mail: req.body.mail,
-              pw: hash
+    } else {
+      User.findOne({mail: req.body.mail}, function(err, obj) {
+          if(req.body.pw != req.body.pwr) {
+            res.render("in", {h: false, fn: `Passwords do not match!`});
+          } else if(obj != null) {
+            res.render("in", {h: false, fn: `Account with this e-mail has already been created!`});
+          } else if(obj == null) {
+            bcrypt.hash(req.body.pw, 10, function(err, hash) {
+              let newUser = new User({
+                fn: req.body.fn,
+                ln: req.body.ln,
+                mail: req.body.mail,
+                pw: hash
+              });
+              res.render("inlogged", {gr: "Password database management", h: true, fn: "", ln: ""});
+              newUser.save(); 
+              req.session.user = newUser;
+              req.session.save();
+              signed = true;
+              cUser = req.body.mail;
             });
-            res.render("inlogged", {gr: "Password database management", h: true, fn: "", ln: ""});
-            newUser.save(); 
-            req.session.user = newUser;
-            req.session.save();
-            signed = true;
-            cUser = req.body.mail;
-          });
-        }
-    });
+          }
+      });
+    }
 });
 
 app.post('/login', (req, res, next) => {
