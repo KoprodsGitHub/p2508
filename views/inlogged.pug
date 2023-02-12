@@ -23,7 +23,6 @@ html
     .toprow {
       display: flex;
       justify-content: space-between;
-      vertical-align: center;
     }
 
     .material-symbols-outlined {
@@ -35,10 +34,10 @@ html
     }
 
 body
-  div(class='w3-container w3-black')
-    form(action='/logout', method='POST', class='toprow')
+  div(class='w3-container w3-black w3-margin')
+    form(action='/logout', method='POST', class='w3-margin toprow')
       h1(class='w3-wide') #{gr}
-      input(type='submit', value='Log out', class='w3-button')
+      input(type='submit', value='Log out', class='w3-margin w3-button')
 
   if(h==false)
     form(action='/hideannc', method='POST', class='w3-margin toprow')
