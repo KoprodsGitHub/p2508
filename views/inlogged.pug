@@ -22,9 +22,20 @@ html
     }
     .toprow {
       display: flex;
-      justify-content: space-between;
+      margin: 0px;
     }
 
+    .logoutbt {
+      background-color: black;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .logoutbt:hover {
+      background-color: yellow;
+      color: black;
+    }
     .material-symbols-outlined {
       font-variation-settings:
       'FILL' 0,
@@ -35,9 +46,9 @@ html
 
 body
   div(class='w3-container w3-black w3-margin')
-    form(action='/logout', method='POST', class='w3-margin toprow')
+    form(action='/logout', method='POST', class='toprow')
       h1(class='w3-wide') #{gr}
-      input(type='submit', value='Log out', class='w3-margin w3-button')
+      input(type='submit', value='Log out', class='logoutbt')
 
   if(h==false)
     form(action='/hideannc', method='POST', class='w3-margin toprow')
