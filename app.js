@@ -108,27 +108,23 @@ app.post('/signup', (req, res, next) => {
 });
 
 app.post('/login', (req, res, next) => {
-  if(req.body.lmail == "pudlisako@gmail.com" && req.body.lpw == "18") {
-    res.render("hey");
-  } else {
-    User.findOne({mail: req.body.lmail}, function(err, obj) {
-        if(obj == null) {
-          res.render("in", {h: false, fn: "User not found, sign up first!"});
-        } else {
-          bcrypt.compare(req.body.lpw, obj.pw, function(err, match) {
-            if (match) {
-              res.render("inlogged", {gr: "Password database management", h: true,  fn: "", ln: ""});
-              req.session.user = obj;
-              req.session.save();
-              signed = true;
-              cUser = obj.mail;
-            } else {
-              res.render("in", {h: false, fn: "Wrong password!"});
-            }
-          })
-        }
-    });
-  }
+  User.findOne({mail: req.body.lmail}, function(err, obj) {
+      if(obj == null) {
+        res.render("in", {h: false, fn: "User not found, sign up first!"});
+      } else {
+        bcrypt.compare(req.body.lpw, obj.pw, function(err, match) {
+          if (match) {
+            res.render("inlogged", {gr: "Password database management", h: true,  fn: "", ln: ""});
+            req.session.user = obj;
+            req.session.save();
+            signed = true;
+            cUser = obj.mail;
+          } else {
+            res.render("in", {h: false, fn: "Wrong password!"});
+          }
+        })
+      }
+  });
 });
 
 
@@ -230,7 +226,6 @@ app.post('/logout', (req, res, next) => {
 
 //one-password operations
 app.post('/passadd', (req, res, next) => {
-  let addAlrt = "Hi";
   if(signed) {
       Pass.findOne({mail: cUser, wn: req.body.awn}, function(err, obj) {
         if(req.body.awn != "" && obj != null) {
